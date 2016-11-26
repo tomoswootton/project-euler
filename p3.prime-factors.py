@@ -1,28 +1,27 @@
-#find all primes
-def primes_of(i):
-    global array_index
-    while array_index < len(prime_array):
-        if i % prime_array[array_index] != 0:
-            array_index += 1
-        else:
-            return      #leave function if i%prime == 0
-        prime_array.append(i)
-        prime_factors(i)
 
-#find all prime factors
-def prime_factors(i):
-    if n % i == 0:
-        array_factors.append(i)
-        print(i)
+#The prime factors of 13195 are 5, 7, 13 and 29.
+#
+#What is the largest prime factor of the number 600851475143 ?
 
-n = int(input("input n: "))
-prime_array = [2, 3]
-array_factors = []
-for i in range(4, n+1):
-    array_index = 0
-    #find all prime numbers under n
-    primes_of(i)#
+#take each number and see if it divides into n. if so, check if it is prime
+def find_prime(tester):
+    if n % tester == 0:
+        check_factor_is_prime(tester)
 
+#prime checker
+def check_factor_is_prime(tester):
+    #check every possible divisor
+    for i in range(2,tester):
+        #if divisor is found, break function
+        if tester % i == 0:
+            return
+    #if no divisor found, tester must be prime factor. add tester to array
+    prime_factors.append(tester)
 
-#print(" ".join(map(str, prime_array)))
-print(" ".join(map(str,array_factors)))
+###
+n = int(input("input n = "))
+prime_factors = []
+#for every integer up to n
+for i in range(2,n):
+    find_prime(i)
+print(' '.join(map(str, prime_factors)))
