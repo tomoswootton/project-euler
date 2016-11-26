@@ -13,6 +13,5 @@ while array[-1] <= 4000000:
     gen_fib()
     is_even()
     #print(" ".join(str(x) for x in array))
-    print("Even array = %s"%(" ".join(map(str, even_array))))
     sumtotal = sum(even_array)
-    print("sum of even = %s"%sumtotal)
+print("sum of even = %s"%sumtotal)
