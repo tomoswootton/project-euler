@@ -3,31 +3,20 @@ import java.util.Arrays;
 
 public class Main {
 
-  int player1_Score = 0;
-  int player2_score = 0;
+  static int player1_Score = 0;
+  static int player2_score = 0;
+
+  static String[] hands = {"high_card","one_pair","two_pair","three_of_a_kind",
+  "straight","flush","full_house","four_of_a_kind","straight_flush","royal_flush"};;
 
   public static void main(String[] args) {
-
-  readFile();
-  //   String[] test1 = {"2H","5H","3H","6H","4H"};
-  //   Hand hand1 = new Hand(test1);
-  //   String[] test2 = {"9S","8S","7S","5S","6S"};
-  //   Hand hand2 = new Hand(test2);
-  //   String[] test3 = {"6S","8S","7D","6S","6H"};
-  //   Hand hand3 = new Hand(test3);
-  //   String[] test4 = {"AS","8S","7D","AS","6H"};
-  //   Hand hand4 = new Hand(test4);
-  //   String[] test5 = {"9S","KS","9D","KS","6H"};
-  //   Hand hand5 = new Hand(test5);
+    readFile();
   }
 
   public static void readFile() {
 
     BufferedReader br = null;
 		FileReader fr = null;
-
-    String[] hands = {"high_card","one_pair","two_pair","three_of_a_kind",
-    "straight","flush","full_house","four_of_a_kind","straight_flush","royal_flush"};;
 
     int p1_wins = 0;
     int p2_wins = 0;
@@ -37,19 +26,11 @@ public class Main {
 			br = new BufferedReader(new FileReader("/home/tomos/work/project-euler/p54.Poker-hands/poker.txt"));
 
 			String sCurrentLine;
-      //for each hand
-			// while ((sCurrentLine = br.readLine()) != null) {
-				// System.out.println(sCurrentLine);
-			// }
+
       sCurrentLine = br.readLine();
 
-      ////// TESTING
-
-
-
-
-      for (int i=0;i<2;i++){
-
+      for (int i=0;i<10;i++){
+        System.out.println("round "+(i+1));
         String[] p1 = {sCurrentLine.substring(0, 2), sCurrentLine.substring(3, 5)
         ,sCurrentLine.substring(6, 8), sCurrentLine.substring(9, 11)
         ,sCurrentLine.substring(12, 14)};
@@ -61,9 +42,14 @@ public class Main {
         Hand handp1 = new Hand(p1);
         Hand handp2 = new Hand(p2);
 
+        System.out.println("p1 hand: "+Arrays.toString(handp1.hand_numbers)+" "+handp1.hand_type);
+        System.out.println("p2 hand: "+Arrays.toString(handp2.hand_numbers)+" "+handp2.hand_type);
+
         processRound(handp1,handp2);
         sCurrentLine = br.readLine();
       }
+
+      System.out.println("p1 score = "+player1_Score + "\np2 score = "+player2_score);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -76,29 +62,62 @@ public class Main {
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
-
 		}
   }
 
 
-  public  static void processRound(Hand p1, Hand p2) {
-    System.out.println(Arrays.toString(p1.hand)+Arrays.toString(p2.hand));
-    // String p1_hand_type = findHandType(p1);
-    // String p2_hand_type = findHandType(p2);
-    //
-    // if(p1_hand_type == p2_hand_type) {
-    //   System.out.println("hands the same");
-    // } else if(hands.indexOf(p1_hand_type) > hands.indexOf(p2_hand_type)) {
-    //   p1_wins++;
-    // } else {
-    //   p2_wins++;
-    // }
+  public static void processRound(Hand p1, Hand p2) {
+
+    if(p1.hand_type != p2.hand_type) {
+      if(findIndexInHandsArray(p1.hand_type) > findIndexInHandsArray(p2.hand_type)){
+        System.out.println("p1 wins with " + p1.hand_type);
+        player1_Score++;
+      } else if(findIndexInHandsArray(p1.hand_type) < findIndexInHandsArray(p2.hand_type)) {
+        System.out.println("p2 wins " + p2.hand_type);
+        player2_score++;
+      }
+    } else {
+    //hand types even
+      if(p1.value_of_winning_card1 > p2.value_of_winning_card1){
+        player1_Score++;
+        System.out.println("p1 wins with "+p1.hand_type+" and vc1 = "+p1.value_of_winning_card1);
+      } else if(p1.value_of_winning_card1 < p2.value_of_winning_card1){
+        player2_score++;
+        System.out.println("p2 wins with "+p2.hand_type+" and vc1 = "+p2.value_of_winning_card1);
+      } else {
+        //value_of_winning_card1 even
+        if(p1.value_of_winning_card2 > p2.value_of_winning_card2){
+          player1_Score++;
+          System.out.println("p1 wins with "+p1.hand_type+" and vc2 = "+p1.value_of_winning_card2);
+        } else if(p1.value_of_winning_card2 < p2.value_of_winning_card2){
+          player2_score++;
+          System.out.println("p2 wins with "+p2.hand_type+" and vc2 = "+p2.value_of_winning_card2);
+        } else {
+          //must find next highest card
+          for(int i=0;i<p1.hand.length;i++){
+            if(p1.hand_numbers[i]>p2.hand_numbers[i]){
+              player1_Score++;
+              System.out.println("p1 wins on high card = "+p1.hand_numbers[i]);
+              break;
+            } else if(p1.hand_numbers[i]<p2.hand_numbers[i]){
+              player2_score++;
+              System.out.println("p2 wins on high card = "+p2.hand_numbers[i]);
+              break;
+            }
+          }
+
+      }
+    }
   }
+}
 
-
-
-
-
-
+  public static int findIndexInHandsArray(String hand_type) {
+    for(int i=0;i<=hands.length-1;i++) {
+      if(hand_type == hands[i]) {
+        return i;
+      }
+    }
+    return -1;
+  }
 
 }
