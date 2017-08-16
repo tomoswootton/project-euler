@@ -29,7 +29,7 @@ public class Main {
 
       sCurrentLine = br.readLine();
 
-      for (int i=0;i<10;i++){
+      for (int i=0;i<1000;i++){
         System.out.println("round "+(i+1));
         String[] p1 = {sCurrentLine.substring(0, 2), sCurrentLine.substring(3, 5)
         ,sCurrentLine.substring(6, 8), sCurrentLine.substring(9, 11)
@@ -49,7 +49,7 @@ public class Main {
         sCurrentLine = br.readLine();
       }
 
-      System.out.println("p1 score = "+player1_Score + "\np2 score = "+player2_score);
+      System.out.println("\n\np1 score = "+player1_Score + "\np2 score = "+player2_score+"\n");
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -94,7 +94,7 @@ public class Main {
           System.out.println("p2 wins with "+p2.hand_type+" and vc2 = "+p2.value_of_winning_card2);
         } else {
           //must find next highest card
-          for(int i=0;i<p1.hand.length;i++){
+          for(int i=p1.hand.length-1;i>=0;i--){
             if(p1.hand_numbers[i]>p2.hand_numbers[i]){
               player1_Score++;
               System.out.println("p1 wins on high card = "+p1.hand_numbers[i]);
